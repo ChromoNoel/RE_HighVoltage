@@ -140,7 +140,7 @@ namespace RE_HighVoltage
                 var ossz = berlesek.Sum(x => (x.EndDate.DayNumber - x.StartDate.DayNumber + 1) * x.DailyFee);
                 var kauciobevetelek = berlesek.Sum(x => x.UseDeposit ? x.Deposit : 0);
 
-                Console.WriteLine($"7. feladat: A cég összes bevétele: {ossz + kauciobevetelek:# ### ###}");
+                Console.WriteLine($"7. feladat: A cég összes bevétele: {ossz + kauciobevetelek:# ### ###} FT");
             }
 
             void Feladat_8(List<Berles> berlesek)
