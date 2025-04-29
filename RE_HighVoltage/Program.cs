@@ -43,6 +43,11 @@ namespace RE_HighVoltage
             UseDeposit = Convert.ToBoolean(Convert.ToInt32(line[15]));
             Uptime = Convert.ToDouble(line[16]);
         }
+
+        public override string ToString()
+        {
+            return $"{Invnumber} {Model} {Color}";
+        }
     }
     internal class Program
     {
@@ -94,25 +99,40 @@ namespace RE_HighVoltage
 
             void Feladat_6(List<Berles> berlesek)
             {
+                Console.WriteLine("6. feladat:");
                 Console.Write("\tKeresett leltári szám: ");
                 string? szam = Console.ReadLine();
 
-                if (szam == string.Empty || szam == "0" || szam == null)
+                if (szam == string.Empty || szam == "0" || szam == null || szam.Length != 9)
                 {
                     return;
                 }
 
-                if (szam[..3] != "LPT" || !szam.All(x => Char.IsDigit(x)))
+                if (szam[..3] != "LPT" || !szam[3..].All(x => Char.IsDigit(x)))
                 {
                     return;
                 }
 
-                
+                Berles? berles = berlesek.FirstOrDefault(x => x.Invnumber == szam, null);
+
+                if (berles == null)
+                {
+                    Console.WriteLine("\tNincs ilyen leltári számú laptop!");
+                } else
+                {
+                    Console.WriteLine($"\t{berles}");
+                }
+            }
+
+            void Feladat_7(List<Berles> berlesek)
+            {
+
             }
 
             //Feladat_3(berles);
             //Feladat_4(berles);
-            Feladat_5(berles);
+            //Feladat_5(berles);
+            //Feladat_6(berles);
         }
     }
 }
