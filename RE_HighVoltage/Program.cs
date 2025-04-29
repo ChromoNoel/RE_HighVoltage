@@ -149,7 +149,7 @@ namespace RE_HighVoltage
                 string szam = LeltarBekeres();
 
                 var atlag = berlesek.Sum(x => x.Invnumber == szam ? x.Uptime : 0) / berlesek.Where(x => x.Invnumber == szam).Count();
-                Console.WriteLine($"8. feladat: Az {szam} leltári számú laptop bérlésenkénti átlagos üzemideje: {Math.Round(atlag, 2)}");
+                Console.WriteLine($"8. feladat: Az {szam} leltári számú laptop bérlésenkénti átlagos üzemideje: {Math.Round(atlag, 2)} óra");
             }
 
             Feladat_3(berles);
