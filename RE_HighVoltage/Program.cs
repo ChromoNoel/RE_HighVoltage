@@ -92,6 +92,24 @@ namespace RE_HighVoltage
                 }
             }
 
+            void Feladat_6(List<Berles> berlesek)
+            {
+                Console.Write("\tKeresett leltári szám: ");
+                string? szam = Console.ReadLine();
+
+                if (szam == string.Empty || szam == "0" || szam == null)
+                {
+                    return;
+                }
+
+                if (szam[..3] != "LPT" || !szam.All(x => Char.IsDigit(x)))
+                {
+                    return;
+                }
+
+                
+            }
+
             //Feladat_3(berles);
             //Feladat_4(berles);
             Feladat_5(berles);
