@@ -2,7 +2,7 @@
 
 namespace RE_HighVoltage
 {
-    public class Berles
+    public class Berlo
     {
         public string PersonalID;
         public string Name;
@@ -10,11 +10,44 @@ namespace RE_HighVoltage
         public int PostalCode;
         public string City;
         public string Address;
+        public string County;
+
+        public Berlo(string id, string name, string dob, string post, string city, string address, string county) 
+        {
+            PersonalID = id;
+            Name = name;
+            Dateofbirth = DateOnly.Parse(dob);
+            PostalCode = Convert.ToInt32(post);
+            City = city;
+            Address = address;
+            County = county;
+        }
+    }
+
+    public class Laptop
+    {
         public string Invnumber;
         public string Model;
-        public string County;
         public int RAM;
         public string Color;
+
+        public Laptop(string invnumber, string model, string rAM, string color)
+        {
+            Invnumber = invnumber;
+            Model = model;
+            RAM = Convert.ToInt32(rAM);
+            Color = color;
+        }
+
+        public override string ToString()
+        {
+            return $"{Invnumber} {Model} {Color}";
+        }
+    }
+    public class Berles
+    {
+        public Berlo berlo;
+        public Laptop laptop;
         public int DailyFee;
         public int Deposit;
         public DateOnly StartDate;
@@ -25,28 +58,18 @@ namespace RE_HighVoltage
         public Berles(string Line)
         {
             string[] line = Line.Split(";");
-            PersonalID = line[0];
-            Name = line[1];
-            Dateofbirth = DateOnly.Parse(line[2]);
-            PostalCode = Convert.ToInt32(line[3]);
-            City = line[4];
-            Address = line[5];
-            Invnumber = line[6];
-            Model = line[7];
-            County = line[8];
-            RAM = Convert.ToInt32(line[9]);
-            Color = line[10];
+            berlo = new Berlo(
+                line[0], line[1], line[2], line[3], line[4], line[5], line[8]
+            );
+            laptop = new Laptop(
+                line[6], line[7], line[9], line[10]
+            );
             DailyFee = Convert.ToInt32(line[11]);
             Deposit = Convert.ToInt32(line[12]);
             StartDate = DateOnly.Parse(line[13]);
             EndDate = DateOnly.Parse(line[14]);
             UseDeposit = Convert.ToBoolean(Convert.ToInt32(line[15]));
             Uptime = Convert.ToDouble(line[16]);
-        }
-
-        public override string ToString()
-        {
-            return $"{Invnumber} {Model} {Color}";
         }
     }
     internal class Program
@@ -69,21 +92,21 @@ namespace RE_HighVoltage
 
             void Feladat_4(List<Berles> berlesek)
             {
-                var szurt = berlesek.Where((Berles berles) => berles.Color == "Szürke" && berles.Model.StartsWith("Acer")).OrderBy((Berles berles) => berles.Invnumber);
+                var szurt = berlesek.Where((Berles berles) => berles.laptop.Color == "szürke" && berles.laptop.Model.StartsWith("Acer")).OrderBy((Berles berles) => berles.laptop.Invnumber);
                 Console.WriteLine("4. feladat: Szürke Acer bérlések");
                 foreach (Berles berles in szurt)
                 {
-                    Console.WriteLine($"\t{berles.Invnumber} {berles.Model} --- {berles.PersonalID} {berles.Name}");
+                    Console.WriteLine($"\t{berles.laptop.Invnumber} {berles.laptop.Model} --- {berles.berlo.PersonalID} {berles.berlo.Name}");
                 }
             }
 
             void Feladat_5(List<Berles> berlesek)
             {
                 Dictionary<string, int> megyeSzamPar = new Dictionary<string, int>();
-                var megyek = berlesek.Select((Berles berles) => berles.County);
+                var megyek = berlesek.Select((Berles berles) => berles.berlo.County);
                 foreach (var megye in megyek)
                 {
-                    var szam = berlesek.Where((Berles berles) => berles.County == megye).Count();
+                    var szam = berlesek.Where((Berles berles) => berles.berlo.County == megye).Count();
                     megyeSzamPar[megye] = szam;
                 }
                 var Rendezett = megyeSzamPar.OrderBy(x => x.Value).Take(2);
@@ -124,14 +147,14 @@ namespace RE_HighVoltage
                     return;
                 }
 
-                Berles? berles = berlesek.FirstOrDefault(x => x.Invnumber == szam, null);
+                Berles? berles = berlesek.FirstOrDefault(x => x.laptop.Invnumber == szam, null);
 
                 if (berles == null)
                 {
                     Console.WriteLine("\tNincs ilyen leltári számú laptop!");
                 } else
                 {
-                    Console.WriteLine($"\t{berles}");
+                    Console.WriteLine($"\t{berles.laptop}");
                 }
             }
 
@@ -148,7 +171,7 @@ namespace RE_HighVoltage
                 Console.Write("Keresett leltári szám: ");
                 string szam = LeltarBekeres();
 
-                var atlag = berlesek.Sum(x => x.Invnumber == szam ? x.Uptime : 0) / berlesek.Where(x => x.Invnumber == szam).Count();
+                var atlag = berlesek.Sum(x => x.laptop.Invnumber == szam ? x.Uptime : 0) / berlesek.Where(x => x.laptop.Invnumber == szam).Count();
                 Console.WriteLine($"8. feladat: Az {szam} leltári számú laptop bérlésenkénti átlagos üzemideje: {Math.Round(atlag, 2)} óra");
             }
 
