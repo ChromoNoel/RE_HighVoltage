@@ -82,7 +82,7 @@ namespace RE_HighVoltage
             reader.ReadLine();
             while (!reader.EndOfStream)
             {
-                berles.Add(new Berles(reader.ReadLine()));
+                berles.Add(new Berles(Line: reader.ReadLine()));
             }
 
             void Feladat_3(List<Berles> berlesek)
@@ -122,7 +122,7 @@ namespace RE_HighVoltage
 
             string LeltarBekeres()
             {
-                string szam = Console.ReadLine();
+                string? szam = Console.ReadLine();
                 if (szam == string.Empty || szam == "0" || szam == null || szam.Length != 9)
                 {
                     return string.Empty;
