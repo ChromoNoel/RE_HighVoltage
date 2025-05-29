@@ -122,24 +122,30 @@ namespace RE_HighVoltage
 
             string LeltarBekeres()
             {
-                string? szam = Console.ReadLine();
-                if (szam == string.Empty || szam == "0" || szam == null || szam.Length != 9)
+                string? szam;
+                try
+                {
+                    do
+                    {
+                        Console.Write("\tKeresett leltári szám: ");
+                        szam = Console.ReadLine();
+                        if (szam == "0" || szam == null)
+                        {
+                            return string.Empty;
+                        }
+                    } while (szam[..3] != "LPT" || szam.Length != 9 || !szam[3..].All(x => Char.IsDigit(x)));
+
+                    return szam;
+                } catch (Exception e)
                 {
                     return string.Empty;
                 }
-
-                if (szam[..3] != "LPT" || !szam[3..].All(x => Char.IsDigit(x)))
-                {
-                    return string.Empty;
-                }
-
-                return szam;
+                
             }
 
             void Feladat_6(List<Berles> berlesek)
             {
                 Console.WriteLine("6. feladat:");
-                Console.Write("\tKeresett leltári szám: ");
                 string szam = LeltarBekeres();
 
                 if (szam == string.Empty)
@@ -168,11 +174,19 @@ namespace RE_HighVoltage
 
             void Feladat_8(List<Berles> berlesek)
             {
-                Console.Write("Keresett leltári szám: ");
+                Console.WriteLine("8. feladat: ");
                 string szam = LeltarBekeres();
 
-                var atlag = berlesek.Sum(x => x.laptop.Invnumber == szam ? x.Uptime : 0) / berlesek.Where(x => x.laptop.Invnumber == szam).Count();
-                Console.WriteLine($"8. feladat: Az {szam} leltári számú laptop bérlésenkénti átlagos üzemideje: {Math.Round(atlag, 2)} óra");
+                var atlag = Math.Round(berlesek.Sum(x => x.laptop.Invnumber == szam ? x.Uptime : 0) / berlesek.Where(x => x.laptop.Invnumber == szam).Count(), 2);
+                
+                if (!Double.IsNaN(atlag))
+                {
+                    Console.WriteLine($"\tAz {szam} leltári számú laptop bérlésenkénti átlagos üzemideje: {atlag} óra");
+                } else
+                {
+                    Console.WriteLine("\tNincs ilyen leltári számú laptop");
+                }
+                
             }
 
             Feladat_3(berles);
